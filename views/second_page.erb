@@ -1,5 +1,6 @@
 <html>
 	<body>
+		<h2>Add Contact</h2>
 		<form method="post" action="second_page">
 			<input type="text" name="name" placeholder="Name" maxlength="30"><br><br>
 			<input type="number" name="phone" placeholder="Phone" maxlength="10"><br><br>
@@ -8,5 +9,21 @@
 			<input type="text" name="notes" placeholder="Notes" maxlength="45"><br><br>
 			<input class="button" type="submit" value="Add Info">
 		</form>
+		<hr>
+		<h2>Update Contact Info</h2>
+		<table>
+		 	<%info.each do |stuff|%>
+		 		<tr>
+		 			<td><%="Update"%><br>
+		 				<input type="radio" name="update<%=stuff[0][0]%>" value="yes">Yes
+		 				<input type="radio" name="update<%=stuff[0][0]%>" value="no" checked>No</td>
+		 			<td><%=stuff[0][0]%></td>
+		 			<td><input type="text" name="name" value="<%=stuff[1][0]%>"></td>
+					<td><input type="number" name="phone" value="<%=stuff[2][0]%>"></td>
+		 			<td><input type="text" name="address" value="<%=stuff[3][0]%>"></td>
+		 			<td><input type="text" name="notes" value="<%=stuff[4][0]%>"></td>
+		 		<tr>
+		 	<%end%>
+ 		<table>
 	</body>
 </html>

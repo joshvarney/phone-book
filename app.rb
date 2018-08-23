@@ -21,7 +21,12 @@ post '/login_page' do
 end	
 
 get '/second_page' do
-	erb :second_page
+	results = client.query("SELECT * FROM usertable")
+	info = []
+  	results.each do |row|
+    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']]]
+ 	end
+	erb :second_page, locals:{info: info}
 end
 
 post '/second_page' do
@@ -35,16 +40,20 @@ post '/second_page' do
 	session[:notes] = notes
 	client.query("INSERT INTO usertable(name, phone, address, notes)
   	VALUES('#{name}', '#{phone}', '#{address}', '#{notes}')")
-	erb :second_page
-	redirect '/third_page'
+  	results = client.query("SELECT * FROM usertable")
+	info = []
+  	results.each do |row|
+    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']]]
+ 	end
+	erb :second_page, locals:{info: info}
 end
 
 get '/third_page' do
 	results = client.query("SELECT * FROM usertable")
-	p results
 	info = []
   	results.each do |row|
-    info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']]]
-  end
+    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']]]
+ 	end
+ 	p info
 	erb :third_page, locals:{info: info, name: session[:name], phone: session[:phone], address: session[:address], notes: session[:notes]}
 end
