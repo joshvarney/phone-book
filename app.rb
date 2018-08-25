@@ -29,8 +29,8 @@ end
 post '/login_page_new' do
 	results2 = client.query("SELECT * FROM useraccounts")
 	loginname = params[:loginname]
-	password_new = params[:password_new]
-	confirmpass_new = params[:confirmpass_new]
+	password = params[:password]
+	confirmpass = params[:confirmpass]
 	session[:loginname] = loginname
 	username_arr = []
 	results2.each do |row|
@@ -38,11 +38,11 @@ post '/login_page_new' do
 	end	
 	if username_arr.include?(loginname)
 		erb :login_page, locals:{error: "", error2: "Username Already Exists"}	 
-	elsif password_new != confirmpass_new
+	elsif password != confirmpass
 		erb :login_page, locals:{error: "", error2: "Check Passwords"}
 	else
 		client.query("INSERT INTO useraccounts(username, password)
-  		VALUES('#{loginname}', '#{password_new}')")
+  		VALUES('#{loginname}', '#{password}')")
    		redirect '/contacts_page'
    	end
 end
@@ -85,6 +85,17 @@ post '/contacts_page_update' do
 		client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}'")
 		counter += 1
 	end
+	results = client.query("SELECT * FROM usertable")
+	info = []
+  	results.each do |row|
+    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']]]
+ 	end
+	erb :contacts_page, locals:{info: info, loginname: session[:loginname]}
+end
+
+post '/contacts_page_delete' do
+	remove = params[:remove]
+	client.query("DELETE FROM `usertable` WHERE `Index`='#{remove.to_i}'")
 	results = client.query("SELECT * FROM usertable")
 	info = []
   	results.each do |row|

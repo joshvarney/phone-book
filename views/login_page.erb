@@ -1,16 +1,16 @@
 <html>
 	<body>
 		<form method="post" action="login_page">
-			<input type="text" name="loginname" placeholder="User Name"><br><br>
-			<input type="password" name="password" placeholder="Password" maxlength="8"><br><br>
+			<input type="text" name="loginname" placeholder="User Name" minlength="2" maxlength="25" required><br><br>
+			<input type="password" name="password" placeholder="Password" minlength="8" maxlength="12" required><br><br>
 			<input class="button" type="submit" value="Login">
 		</form>
 		<%=error%>
 		<hr>
 		<form method="post" action="login_page_new">
-			<input type="text" name="loginname" placeholder="User Name"><br><br>
-			<input id="password1" type="password" name="password_new" placeholder="Password" minlength="8" maxlength="8"><br><br>
-			<input id="password2" type="password" name="confirmpass_new" placeholder="Confirm" minlength="8" maxlength="8"><br><br>	
+			<input type="text" name="loginname" placeholder="User Name" minlength="2" maxlength="25" required><br><br>
+			<input id="password1" type="password" name="password" placeholder="Password" minlength="8" maxlength="12" required><br><br>
+			<input id="password2" type="password" name="confirmpass" placeholder="Confirm" minlength="8" maxlength="12" required><br><br>	
 			<input class="button" type="submit" value="Create Account">
 		</form>
 		<%=error2%>
