@@ -1,0 +1,31 @@
+<html>
+	<body>
+		<h1><%=loginname%></h1>
+		<h2>Add Contact</h2>
+		<form method="post" action="contacts_page_add">
+			<input type="text" name="name" placeholder="Name" maxlength="30" required><br><br>
+			<input type="number" name="phone" placeholder="Phone" maxlength="10" required><br><br>
+			<input type="text" name="address"
+			placeholder="Address" maxlength="45" required><br><br>
+			<input type="text" name="notes" placeholder="Notes" maxlength="45" required><br><br>
+			<input class="button" type="submit" value="Add Info">
+		</form>
+		<hr>
+		<h2>Update Contact Info</h2>
+		<form method="post" action="contacts_page_update">
+			<table>
+			 	<%info.each do |stuff|%>
+			 		<tr>
+			 			<td><%=stuff[0][0]%>
+			 			<input type="hidden" name="index_arr[]" value="<%=stuff[0][0]%>"></td>
+			 			<td><input type="text" name="name_arr[]" value="<%=stuff[1][0]%>" required></td>
+						<td><input type="number" name="phone_arr[]" value="<%=stuff[2][0]%>" required></td>
+			 			<td><input type="text" name="address_arr[]" value="<%=stuff[3][0]%>" required></td>
+			 			<td><input type="text" name="notes_arr[]" value="<%=stuff[4][0]%>" required></td>
+			 		</tr>
+			 	<%end%>
+	 		</table><br>
+	 		<input calss="button" type="submit" value="Update Info">
+	 	</form>
+	</body>
+</html>
