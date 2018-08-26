@@ -1,0 +1,66 @@
+html {
+  border: 5px solid black;
+  background: url("/images/mountainsky.jpeg") no-repeat bottom center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  min-width: 700px;
+}
+body {
+  margin: auto;
+  text-align: center;
+}
+#box {
+  margin: auto;
+  font-family: arial, sans-serif;
+  background-color: black;
+  opacity: .8;
+  word-wrap: break-word;
+  color: white;
+  padding-top: 20px;
+  width: 100%;
+  text-align: center;
+  min-height: 100%;
+  max-height: fit-content;
+  padding-bottom: 25px;
+}
+table {
+  margin: auto;
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 95%;
+}
+td, th {
+  border: 1px solid white;
+  text-align: left;
+  padding: 8px;
+}
+tr {
+  color: white;
+  background-color: #1E1E1E;
+}
+tr:nth-child(even) {
+  color: white;
+  background-color: black;
+}
+.button {
+  background-color: black;
+  border: 2px solid lightgrey;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+ 
+}
+
+.button:hover {
+  opacity: 1;
+  background-color: lightgrey;
+  color: black;
+  border: 2px solid black;
+}
