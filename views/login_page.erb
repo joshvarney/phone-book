@@ -1,22 +1,40 @@
 <html>
 	<div id="box">
-		<h1>Phone Book</h1>
-		<h3>Login</h3>
 		<body>
-			<form method="post" action="login_page">
-				<input type="text" name="loginname" placeholder="User Name" minlength="2" maxlength="25" required><br><br>
-				<input type="password" name="password" placeholder="Password" minlength="8" maxlength="12" required><br><br>
-				<input class="button" type="submit" value="Login">
-			</form>
-			<%=error%>
-			<h3>Create New Account</h3>
-			<form method="post" action="login_page_new">
-				<input type="text" name="loginname" placeholder="User Name" minlength="2" maxlength="25" required><br><br>
-				<input id="password1" type="password" name="password" placeholder="Password" minlength="8" maxlength="12" required><br><br>
-				<input id="password2" type="password" name="confirmpass" placeholder="Confirm" minlength="8" maxlength="12" required><br><br>	
-				<input class="button" type="submit" value="Create Account">
-			</form>
-			<%=error2%>
+			<h1>Phone Book</h1>
+			<h3>Login</h3>
+				<form method="post" action="login_page">
+					<input type="text" name="loginname" placeholder="User Name" minlength="2" maxlength="25" required><br><br>
+					<input type="password" name="password" placeholder="Password" minlength="8" maxlength="12" required><br><br>
+					<input class="button" type="submit" value="Login">
+				</form>
+				<div class="error"><%=error%></div>
+				<h3>Create New Account</h3>
+				<p>(Password 8-12 Characters)</p>
+				<form method="post" action="login_page_new">
+					<input type="text" name="loginname" placeholder="User Name" minlength="2" maxlength="25" required><br><br>
+					<input id="password1" type="password" name="password" placeholder="Password" minlength="8" maxlength="12" required><br><br>
+					<input id="password2" type="password" name="confirmpass" placeholder="Confirm" minlength="8" maxlength="12" required><br><br>	
+					<input class="button" type="submit" value="Create Account">
+				</form>
+			<div class="error"><p id="validate-status"></p></div>
+			<div class="error"><%=error2%></div>
 		</body>
-	</div>	
+	</div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function() {
+		  $("#password2").keyup(validate);
+		});
+		function validate() {
+		  var password1 = $("#password1").val();
+		  var password2 = $("#password2").val();		 
+		    if(password1 == password2) {
+		       $("#validate-status").text("Match");        
+		    }
+		    else {
+		        $("#validate-status").text("No Match");  
+		    }		    
+		}
+	</script>
 </html>
