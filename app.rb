@@ -78,12 +78,14 @@ post '/contacts_page_update' do
 	address_arr = params[:address_arr]
 	notes_arr = params[:notes_arr]
 	counter = 0
-	index_arr.each do |ind|
-		client.query("UPDATE `usertable` SET `Name`='#{name_arr[counter]}' WHERE `Index`='#{ind}'")
-		client.query("UPDATE `usertable` SET `Phone`='#{phone_arr[counter]}' WHERE `Index`='#{ind}'")
-		client.query("UPDATE `usertable` SET `Address`='#{address_arr[counter]}' WHERE `Index`='#{ind}'")
-		client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}'")
-		counter += 1
+	unless index_arr == nil
+		index_arr.each do |ind|
+			client.query("UPDATE `usertable` SET `Name`='#{name_arr[counter]}' WHERE `Index`='#{ind}'")
+			client.query("UPDATE `usertable` SET `Phone`='#{phone_arr[counter]}' WHERE `Index`='#{ind}'")
+			client.query("UPDATE `usertable` SET `Address`='#{address_arr[counter]}' WHERE `Index`='#{ind}'")
+			client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}'")
+			counter += 1
+		end
 	end
 	results = client.query("SELECT * FROM usertable")
 	info = []
