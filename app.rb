@@ -10,17 +10,20 @@ get '/' do
 	erb :login_page, locals:{error: "", error2: ""}
 end
 
-post '/login_page' do
-	results2 = client.query("SELECT * FROM useraccounts")	
+post '/login_page' do	
 	loginname = params[:loginname]
+	results2 = client.query("SELECT * FROM useraccounts WHERE `username` = '#{loginname}'")
 	password = params[:password]
 	session[:loginname] = loginname
 	logininfo = []
 	results2.each do |row|
-		logininfo << [[row['Index']], [row['username']], [row['password']]]
+		logininfo << [[row['username']], [row['password']]]
 	end
 	logininfo.each do |accounts|
-		if accounts[1][0] == loginname && accounts[2][0] == password
+		salt = accounts[1][0].split('')
+		salt = salt[0..28].join
+		encrypt = BCrypt::Engine.hash_secret(password, salt)
+		if accounts[0][0] == loginname && accounts[1][0] == encrypt
 			redirect '/contacts_page'
 		end	
 	end
@@ -33,6 +36,7 @@ post '/login_page_new' do
 	password = params[:password]
 	confirmpass = params[:confirmpass]
 	session[:loginname] = loginname
+	encryption = BCrypt::Password.create(password)
 	username_arr = []
 	results2.each do |row|
 		username_arr << row['username']
@@ -43,7 +47,7 @@ post '/login_page_new' do
 		erb :login_page, locals:{error: "", error2: "Check Passwords"}
 	else
 		client.query("INSERT INTO useraccounts(username, password)
-  		VALUES('#{loginname}', '#{password}')")
+  		VALUES('#{loginname}', '#{encryption}')")
    		redirect '/contacts_page'
    	end
 end
