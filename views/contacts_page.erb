@@ -47,7 +47,7 @@
 			<h2>Delete Contact</h2>
 		 	<form method="post" action="contacts_page_delete">
 		 		<a>Enter Index Number of Contact to Delete: </a><br><br>
-		 		<input type="number" name="number" pattern="[0-9]+" title="Only Numbers"><br><br>
+		 		<input type="number" name="number" pattern="[0-9]+" title="Only Numbers" required><br><br>
 		 		<input hidden type="text" name="owner" value="<%=loginname%>">
 		 		<%counter = 1%>
 				 	<%info.each do |stuff|%>			 						 		

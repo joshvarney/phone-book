@@ -97,6 +97,7 @@ post '/contacts_page_update' do
 	address_arr = params[:address_arr]
 	notes_arr = params[:notes_arr]
 	owner_arr = params[:owner_arr]
+	loginname = session[:loginname]
 	counter = 0
 	unless index_arr == nil
 		index_arr.each do |ind|
@@ -108,7 +109,7 @@ post '/contacts_page_update' do
 			counter += 1
 		end
 	end
-	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{owner_arr[0]}'")
+	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{loginname}'")
 	info = []
   	results.each do |row|
     	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']], [row['Owner']], [row['Number']]]
