@@ -106,19 +106,18 @@ post '/contacts_page_update' do
 	address_arr = params[:address_arr]
 	notes_arr = params[:notes_arr]
 	loginname = session[:loginname]
-	index_arr = client.escape(owner_arr)
-	owner_arr = client.escape(owner_arr)
-	loginname = client.escape(owner_arr)
+	loginname = client.escape(loginname)
 	counter = 0
 	unless index_arr == nil
 		index_arr.each do |ind|
+			ind = client.escape(ind)
 			number_arr[counter] = client.escape(number_arr[counter])
 			client.query("UPDATE `usertable` SET `Number`='#{number_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
 			name_arr[counter] = client.escape(name_arr[counter])
 			client.query("UPDATE `usertable` SET `Name`='#{name_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
 			phone_arr[counter] = client.escape(phone_arr[counter])
 			client.query("UPDATE `usertable` SET `Phone`='#{phone_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
-			address_arr[counter] = client.escape(phone_arr[counter])
+			address_arr[counter] = client.escape(address_arr[counter])
 			client.query("UPDATE `usertable` SET `Address`='#{address_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
 			notes_arr[counter] = client.escape(notes_arr[counter])
 			client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
@@ -142,16 +141,18 @@ post '/contacts_page_delete' do
 	address_arr = params[:address_arr]
 	notes_arr = params[:notes_arr]
 	loginname = session[:loginname]
+	loginname = client.escape(loginname)
 	counter = 0
 	unless index_arr == nil
 		index_arr.each do |ind|
+			ind = client.escape(ind)
 			number_arr[counter] = client.escape(number_arr[counter])
 			client.query("UPDATE `usertable` SET `Number`='#{number_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
 			name_arr[counter] = client.escape(name_arr[counter])
 			client.query("UPDATE `usertable` SET `Name`='#{name_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
 			phone_arr[counter] = client.escape(phone_arr[counter])
 			client.query("UPDATE `usertable` SET `Phone`='#{phone_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
-			address_arr[counter] = client.escape(phone_arr[counter])
+			address_arr[counter] = client.escape(address_arr[counter])
 			client.query("UPDATE `usertable` SET `Address`='#{address_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
 			notes_arr[counter] = client.escape(notes_arr[counter])
 			client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
