@@ -21,7 +21,7 @@
 					 		<input hidden name="index_arr[]" value="<%=stuff[0][0]%>">
 					 		<input hidden name="number_arr[]" value="<%=counter%>"></td>
 					 		<td><input type="text" name="name_arr[]" value="<%=stuff[1][0]%>" minlength="2" maxlength="30" pattern="[a-zA-Z0-9\s]+" title="No Special Characters" required></td>
-							<td><input type="number" name="phone_arr[]" value="<%=stuff[2][0]%>" minlength="10" maxlength="10" pattern="[0-9]+" title="Only Numbers" required></td>
+							<td><input type="text" name="phone_arr[]" value="<%=stuff[2][0]%>" minlength="10" maxlength="10" pattern="[0-9]+" title="Only Numbers" required></td>
 					 		<td><input type="text" name="address_arr[]" value="<%=stuff[3][0]%>" maxlength="45" pattern="[a-zA-Z0-9\s]+" title="No Special Characters"></td>
 							<td><input type="text" name="notes_arr[]" value="<%=stuff[4][0]%>" maxlength="45" pattern="[a-zA-Z0-9\s]+" title="No Special Characters"></td>				 		
 							<input hidden type="text" name="owner_arr[]" value="<%=stuff[5][0]%>">
@@ -36,7 +36,7 @@
 			<form method="post" action="contacts_page_add">
 				<input hidden type="text" name="number" value="<%=counter%>">
 				<input type="text" name="name" placeholder="Name" maxlength="30" pattern="[a-zA-Z0-9\s]+" title="No Special Characters" required>
-				<input type="number" name="phone" placeholder="Phone" minlength="10" maxlength="10" pattern="[0-9]+" title="Only Numbers" required>
+				<input type="text" name="phone" placeholder="Phone" minlength="10" maxlength="10" pattern="[0-9]+" title="Only Numbers" required>
 				<input type="text" name="address" placeholder="Address" maxlength="45" pattern="[a-zA-Z0-9\s]+" title="No Special Characters">
 				<input type="text" name="notes" placeholder="Notes" maxlength="45" pattern="[a-zA-Z0-9\s]+" title="No Special Characters"><br><br>
 				<input hidden type="text" name="owner" value="<%=loginname%>">
