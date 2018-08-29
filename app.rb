@@ -12,6 +12,7 @@ end
 
 post '/login_page' do	
 	loginname = params[:loginname]
+	loginname1 = loginname.split('')
 	results2 = client.query("SELECT * FROM useraccounts WHERE `username` = '#{loginname}'")
 	password = params[:password]
 	session[:loginname] = loginname
@@ -26,7 +27,7 @@ post '/login_page' do
 		if accounts[0][0] == loginname && accounts[1][0] == encrypt
 			redirect '/contacts_page'
 		end	
-	end
+	end	
 	erb :login_page, locals:{logininfo: logininfo, error: "Incorrect Username/Password", error2: ""}
 end
 
@@ -37,11 +38,20 @@ post '/login_page_new' do
 	confirmpass = params[:confirmpass]
 	session[:loginname] = loginname
 	encryption = BCrypt::Password.create(password)
+	loginname1 = loginname.split('')
+	counter = 0
+	loginname1.each do |elements|
+		if elements == " "
+			counter += 1
+		end
+	end
 	username_arr = []
 	results2.each do |row|
 		username_arr << row['username']
-	end	
-	if username_arr.include?(loginname)
+	end
+	if counter >= 2
+		erb :login_page, locals:{error: "", error2: "Invalid Username Format"}
+	elsif username_arr.include?(loginname)
 		erb :login_page, locals:{error: "", error2: "Username Already Exists"}	 
 	elsif password != confirmpass
 		erb :login_page, locals:{error: "", error2: "Check Passwords"}
@@ -53,60 +63,85 @@ post '/login_page_new' do
 end
 
 get '/contacts_page' do
-	results = client.query("SELECT * FROM usertable")
+	loginname = session[:loginname]
+	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{loginname}'")
 	info = []
   	results.each do |row|
-    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']]]
+    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']], [row['Owner']], [row['Number']]]
  	end
 	erb :contacts_page, locals:{info: info, loginname: session[:loginname]}
 end
 
 post '/contacts_page_add' do
+	number = params[:number]
 	name = params[:name]
 	phone = params[:phone]
 	address = params[:address]
 	notes = params[:notes]
-	client.query("INSERT INTO usertable(name, phone, address, notes)
-  	VALUES('#{name}', '#{phone}', '#{address}', '#{notes}')")
-  	results = client.query("SELECT * FROM usertable")
+	owner = params[:owner]
+	client.query("INSERT INTO usertable(number, name, phone, address, notes, owner)
+  	VALUES('#{number}', '#{name}', '#{phone}', '#{address}', '#{notes}', '#{owner}')")
+  	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{owner}'")
 	info = []
   	results.each do |row|
-    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']]]
+    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']], [row['Owner']], [row['Number']]]
  	end
 	erb :contacts_page, locals:{info: info, loginname: session[:loginname]}
 end
 
 post '/contacts_page_update' do
 	index_arr = params[:index_arr]
+	number_arr = params[:number_arr]
 	name_arr = params[:name_arr]
 	phone_arr = params[:phone_arr]
 	address_arr = params[:address_arr]
 	notes_arr = params[:notes_arr]
+	owner_arr = params[:owner_arr]
 	counter = 0
 	unless index_arr == nil
 		index_arr.each do |ind|
-			client.query("UPDATE `usertable` SET `Name`='#{name_arr[counter]}' WHERE `Index`='#{ind}'")
-			client.query("UPDATE `usertable` SET `Phone`='#{phone_arr[counter]}' WHERE `Index`='#{ind}'")
-			client.query("UPDATE `usertable` SET `Address`='#{address_arr[counter]}' WHERE `Index`='#{ind}'")
-			client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}'")
+			client.query("UPDATE `usertable` SET `Number`='#{number_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
+			client.query("UPDATE `usertable` SET `Name`='#{name_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
+			client.query("UPDATE `usertable` SET `Phone`='#{phone_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
+			client.query("UPDATE `usertable` SET `Address`='#{address_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
+			client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
 			counter += 1
 		end
 	end
-	results = client.query("SELECT * FROM usertable")
+	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{owner_arr[0]}'")
 	info = []
   	results.each do |row|
-    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']]]
+    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']], [row['Owner']], [row['Number']]]
  	end
 	erb :contacts_page, locals:{info: info, loginname: session[:loginname]}
 end
 
 post '/contacts_page_delete' do
-	remove = params[:remove]
-	client.query("DELETE FROM `usertable` WHERE `Index`='#{remove.to_i}'")
-	results = client.query("SELECT * FROM usertable")
+	number = params[:number]
+	owner = params[:owner]
+	index_arr = params[:index_arr]
+	number_arr = params[:number_arr]
+	name_arr = params[:name_arr]
+	phone_arr = params[:phone_arr]
+	address_arr = params[:address_arr]
+	notes_arr = params[:notes_arr]
+	owner_arr = params[:owner_arr]
+	counter = 0
+	unless index_arr == nil
+		index_arr.each do |ind|
+			client.query("UPDATE `usertable` SET `Number`='#{number_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
+			client.query("UPDATE `usertable` SET `Name`='#{name_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
+			client.query("UPDATE `usertable` SET `Phone`='#{phone_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
+			client.query("UPDATE `usertable` SET `Address`='#{address_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
+			client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
+			counter += 1
+		end
+	end
+	client.query("DELETE FROM `usertable` WHERE `Number`='#{number}' AND `Owner`='#{owner}'")
+	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{owner}'")
 	info = []
   	results.each do |row|
-    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']]]
+    	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']], [row['Owner']], [row['Number']]]
  	end
 	erb :contacts_page, locals:{info: info, loginname: session[:loginname]}
 end
