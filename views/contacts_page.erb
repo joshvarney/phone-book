@@ -39,16 +39,14 @@
 				<input type="text" name="phone" placeholder="Phone" minlength="10" maxlength="10" pattern="[0-9]+" title="Only Numbers" required>
 				<input type="text" name="address" placeholder="Address" maxlength="45" pattern="[a-zA-Z0-9\s]+" title="No Special Characters">
 				<input type="text" name="notes" placeholder="Notes" maxlength="45" pattern="[a-zA-Z0-9\s]+" title="No Special Characters"><br><br>
-				<input hidden name="owner" value="<%=loginname%>">
-				<input class="button" type="submit" value="Add Info">
-				
+				<input class="button" type="submit" value="Add Info">				
 			</form>
 			<hr>
 			<h2>Delete Contact</h2>
 		 	<form method="post" action="contacts_page_delete">
 		 		<a>Enter Index Number of Contact to Delete: </a><br><br>
-		 		<input type="number" name="number" pattern="[0-9]+" title="Only Numbers" required><br><br>
-		 		<input hidden type="text" name="owner" value="<%=loginname%>">
+		 		<%counter -= 1
+		 		<input type="number" name="number" pattern="[0-9]+" title="Only Numbers" min="1" max="<%=counter%>" required><br><br>
 		 		<%counter = 1%>
 				<%info.each do |stuff|%>			 						 		
 				 	<input hidden name="index_arr[]" value="<%=stuff[0][0]%>">
@@ -57,7 +55,6 @@
 					<input hidden name="phone_arr[]" value="<%=stuff[2][0]%>">
 			 		<input hidden name="address_arr[]" value="<%=stuff[3][0]%>">
 					<input hidden name="notes_arr[]" value="<%=stuff[4][0]%>">				 		
-					<input hidden name="owner_arr[]" value="<%=stuff[5][0]%>">
 					<%counter += 1%>						
 			 	<%end%>
 		 		<input class="button" type="submit" value="Delete Contact">

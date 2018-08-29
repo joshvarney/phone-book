@@ -12,6 +12,7 @@ end
 
 post '/login_page' do	
 	loginname = params[:loginname]
+	loginname = client.escape(loginname)
 	results2 = client.query("SELECT * FROM useraccounts WHERE `username` = '#{loginname}'")
 	password = params[:password]
 	session[:loginname] = loginname
@@ -36,6 +37,7 @@ post '/login_page_new' do
 	password = params[:password]
 	confirmpass = params[:confirmpass]
 	session[:loginname] = loginname
+	password = client.escape(password)
 	encryption = BCrypt::Password.create(password)
 	loginname1 = loginname.split('')
 	counter = 0
@@ -55,6 +57,7 @@ post '/login_page_new' do
 	elsif password != confirmpass
 		erb :login_page, locals:{error: "", error2: "Check Passwords"}
 	else
+		loginname = client.escape(loginname)
 		client.query("INSERT INTO useraccounts(username, password)
   		VALUES('#{loginname}', '#{encryption}')")
    		redirect '/contacts_page'
@@ -63,6 +66,7 @@ end
 
 get '/contacts_page' do
 	loginname = session[:loginname]
+	loginname = client.escape(loginname)
 	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{loginname}'")
 	info = []
   	results.each do |row|
@@ -77,10 +81,16 @@ post '/contacts_page_add' do
 	phone = params[:phone]
 	address = params[:address]
 	notes = params[:notes]
-	owner = params[:owner]
+	loginname = session[:loginname]
+	number = client.escape(number)
+	name = client.escape(name)
+	phone = client.escape(phone)
+	address = client.escape(address)
+	notes = client.escape(notes)
+	loginname = client.escape(loginname)
 	client.query("INSERT INTO usertable(number, name, phone, address, notes, owner)
-  	VALUES('#{number}', '#{name}', '#{phone}', '#{address}', '#{notes}', '#{owner}')")
-  	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{owner}'")
+  	VALUES('#{number}', '#{name}', '#{phone}', '#{address}', '#{notes}', '#{loginname}')")
+  	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{loginname}'")
 	info = []
   	results.each do |row|
     	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']], [row['Owner']], [row['Number']]]
@@ -95,16 +105,23 @@ post '/contacts_page_update' do
 	phone_arr = params[:phone_arr]
 	address_arr = params[:address_arr]
 	notes_arr = params[:notes_arr]
-	owner_arr = params[:owner_arr]
 	loginname = session[:loginname]
+	index_arr = client.escape(owner_arr)
+	owner_arr = client.escape(owner_arr)
+	loginname = client.escape(owner_arr)
 	counter = 0
 	unless index_arr == nil
 		index_arr.each do |ind|
-			client.query("UPDATE `usertable` SET `Number`='#{number_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
-			client.query("UPDATE `usertable` SET `Name`='#{name_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
-			client.query("UPDATE `usertable` SET `Phone`='#{phone_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
-			client.query("UPDATE `usertable` SET `Address`='#{address_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
-			client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
+			number_arr[counter] = client.escape(number_arr[counter])
+			client.query("UPDATE `usertable` SET `Number`='#{number_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
+			name_arr[counter] = client.escape(name_arr[counter])
+			client.query("UPDATE `usertable` SET `Name`='#{name_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
+			phone_arr[counter] = client.escape(phone_arr[counter])
+			client.query("UPDATE `usertable` SET `Phone`='#{phone_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
+			address_arr[counter] = client.escape(phone_arr[counter])
+			client.query("UPDATE `usertable` SET `Address`='#{address_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
+			notes_arr[counter] = client.escape(notes_arr[counter])
+			client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
 			counter += 1
 		end
 	end
@@ -118,27 +135,32 @@ end
 
 post '/contacts_page_delete' do
 	number = params[:number]
-	owner = params[:owner]
 	index_arr = params[:index_arr]
 	number_arr = params[:number_arr]
 	name_arr = params[:name_arr]
 	phone_arr = params[:phone_arr]
 	address_arr = params[:address_arr]
 	notes_arr = params[:notes_arr]
-	owner_arr = params[:owner_arr]
+	loginname = session[:loginname]
 	counter = 0
 	unless index_arr == nil
 		index_arr.each do |ind|
-			client.query("UPDATE `usertable` SET `Number`='#{number_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
-			client.query("UPDATE `usertable` SET `Name`='#{name_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
-			client.query("UPDATE `usertable` SET `Phone`='#{phone_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
-			client.query("UPDATE `usertable` SET `Address`='#{address_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
-			client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{owner_arr[0]}'")
+			number_arr[counter] = client.escape(number_arr[counter])
+			client.query("UPDATE `usertable` SET `Number`='#{number_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
+			name_arr[counter] = client.escape(name_arr[counter])
+			client.query("UPDATE `usertable` SET `Name`='#{name_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
+			phone_arr[counter] = client.escape(phone_arr[counter])
+			client.query("UPDATE `usertable` SET `Phone`='#{phone_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
+			address_arr[counter] = client.escape(phone_arr[counter])
+			client.query("UPDATE `usertable` SET `Address`='#{address_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
+			notes_arr[counter] = client.escape(notes_arr[counter])
+			client.query("UPDATE `usertable` SET `Notes`='#{notes_arr[counter]}' WHERE `Index`='#{ind}' AND `Owner`='#{loginname}'")
 			counter += 1
 		end
 	end
-	client.query("DELETE FROM `usertable` WHERE `Number`='#{number}' AND `Owner`='#{owner}'")
-	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{owner}'")
+	number = client.escape(number)
+	client.query("DELETE FROM `usertable` WHERE `Number`='#{number}' AND `Owner`='#{loginname}'")
+	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{loginname}'")
 	info = []
   	results.each do |row|
     	info << [[row['Index']], [row['Name']], [row['Phone']], [row['Address']], [row['Notes']], [row['Owner']], [row['Number']]]
