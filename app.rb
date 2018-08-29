@@ -12,7 +12,6 @@ end
 
 post '/login_page' do	
 	loginname = params[:loginname]
-	loginname1 = loginname.split('')
 	results2 = client.query("SELECT * FROM useraccounts WHERE `username` = '#{loginname}'")
 	password = params[:password]
 	session[:loginname] = loginname
