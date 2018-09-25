@@ -65,6 +65,9 @@ post '/login_page_new' do
 end
 
 get '/contacts_page' do
+	if session[:loginname] == nil
+		session[:loginname] = "guest"
+	end	
 	loginname = session[:loginname]
 	loginname = client.escape(loginname)
 	results = client.query("SELECT * FROM usertable WHERE `Owner`='#{loginname}'")

@@ -24,6 +24,13 @@ body {
   max-height: fit-content;
   padding-bottom: 25px;
 }
+
+#box form input {
+  font-size: 24px;
+  outline: none;
+  border: 1px solid #000;
+}
+
 table {
   margin: auto;
   font-family: arial, sans-serif;
@@ -67,4 +74,7 @@ tr:nth-child(even) {
 
 .error {
   color: yellow;
+}
+.fb-login-button {
+  margin-left: 120px;
 }
